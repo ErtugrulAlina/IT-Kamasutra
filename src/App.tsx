@@ -5,21 +5,26 @@ import Navbar from "./components/Navbar/Navbar";
 import Profile from "./components/Profile/Profile";
 import MyPosts from "./components/Profile/MyPosts/MyPosts";
 import {Dialogs} from "./components/Dialogs/Dialogs";
+import {BrowserRouter, Route} from "react-router-dom";
+import {News} from "./components/News/News";
+import { Music } from './components/Music/Music';
 
 
 function App() {
     return (
-
-        <div className={"wrapper"}>
-            <Header/>
-            <Navbar/>
-            {/*<Profile/>*/}
-
-            <div className ={"wrapper-content"}>
-                <Dialogs/>
+        <BrowserRouter>
+            <div className={"wrapper"}>
+                <Header/>
+                <Navbar/>
+                <div className={"wrapper-content"}>
+                    <Route  path={'/dialogs'} render={() => <Dialogs/>}/>
+                    <Route  path={'/profile'} render={()=><Profile/>}/>
+                    <Route  path={'/news'} render={()=><News/>}/>
+                    <Route  path={'/music'} render={()=><Music/>}/>
+                </div>
             </div>
+        </BrowserRouter>
 
-        </div>
     );
 }
 
