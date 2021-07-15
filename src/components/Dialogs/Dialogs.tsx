@@ -1,25 +1,41 @@
-import React from 'react';
+import React, {useState} from 'react';
 import s from "./Dialogs.module.css"
-import {DialogItem} from "./DialogItem";
-import {Message} from "./Message";
+import {DialogItem} from "./DialogItem/DialogItem";
+import {Message} from "./Message/Message";
+import state, {DialogsType, MessagesType} from "../../Redux/state";
+import {v1} from "uuid";
 
-export const Dialogs = (props:any) => {
+
+type DialogsPropsType = {
+    state: { dialogs: DialogsType, messages: MessagesType }
+}
+
+export const Dialogs = (props: DialogsPropsType) => {
+    const [messages, setMessages] = useState<MessagesType>(props.state.messages)
+    let addMessage = (message: string) => {
+        const newMessage = {id: v1(), content: message}
+        setMessages([...messages, newMessage])
+    }
+    const [text, setText] = useState("")
+    const addTitle = () => {
+        addMessage(text)
+        setText("")
+    }
+
+    const dialogsJSXElements = props.state.dialogs.map((d) => <DialogItem id={d.id} name={d.name} avatar={d.avatar}/>)
+    const messagesJSXElements = messages.map((d) => <Message id={props.state.dialogs[0].id}
+                                                                         content={d.content}/>)
     return (
         <div className={s.dialogs}>
             <div className={s.dialogsItem}>
-               <DialogItem id={1} name={"Alina"}/>
-               <DialogItem id={2} name={"Erkan"}/>
-               <DialogItem id={3} name={"Vedat"}/>
-               <DialogItem id={4} name={"Vova"}/>
-               <DialogItem id={5} name={"Luda"}/>
-               <DialogItem id={6} name={"Alex"}/>
+                {dialogsJSXElements}
             </div>
             <div className={s.messages}>
-                <Message content={"Hi"}/>
-                <Message content={"How are you?"}/>
-                <Message content={"How is going?"}/>
-                <Message content={"What are you doing?"}/>
-
+                {messagesJSXElements}
+                <textarea value={text} onChange={(e) => setText(e.currentTarget.value)}></textarea>
+                <div>
+                    <button onClick={addTitle}>Send</button>
+                </div>
             </div>
         </div>
     )

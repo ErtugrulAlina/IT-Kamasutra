@@ -1,20 +1,52 @@
-import React from "react";
+import React, {useState} from "react";
 import s from "./MyPosts.module.css"
 import Post from "./Post/Post";
+import {v1} from "uuid";
+import {MessagesDataType} from "../../../Redux/state";
 
-const MyPosts = (props:any) => {
+
+type MyPostsType = {
+    postData: MessagesDataType
+}
+
+const MyPosts = (props: MyPostsType) => {
+    const [posts, setPosts] = useState<MessagesDataType>(props.postData)
+
+    let addPost = (title: string) => {
+        const newPost = {id: v1(), message: title, likesCount: 0}
+        setPosts([newPost, ...posts])
+    }
+
+    const [title, setTitle] = useState("")
+
+    const addTitle = () => {
+        addPost(title)
+        setTitle("")
+    }
+
+    const deletePost = (id: string) => {
+        const newPosts = posts.filter((p) => p.id !== id)
+        setPosts(newPosts)
+    }
+
+    const messagesJSXElements = posts.map((d) => <Post id={d.id}
+                                                       message={d.message}
+                                                       likesCount={d.likesCount}
+                                                       deletePost={deletePost}/>)
+
     return (
-        <div className={s.item}>
-            My post
+        <div className={s.postBlock}>
+            <h3>My post</h3>
             <div className={s.textarea}>
-                <textarea name="" id=""> text</textarea>
-                <button>Send</button>
+                <div>
+                    <textarea value={title} onChange={(e) => setTitle(e.currentTarget.value)} name=""
+                              id="">text</textarea>
+                </div>
+                <div>
+                    <button onClick={addTitle}>Send</button>
+                </div>
             </div>
-
-            <div className={s.item}>
-                <Post message={"Hello friends"} />
-                <Post message={"It's my first post"}/>
-            </div>
+            <div className={s.posts}>{messagesJSXElements}</div>
         </div>
     )
 }
