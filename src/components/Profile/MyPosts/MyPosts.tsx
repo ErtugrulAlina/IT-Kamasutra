@@ -1,32 +1,22 @@
 import React, {ChangeEvent, RefObject, useState} from "react";
 import s from "./MyPosts.module.css"
 import Post from "./Post/Post";
-import {v1} from "uuid";
-import state, {ProfileType} from "../../../Redux/state";
-import {rerenderEntireTree} from "../../../render";
+
+import {ActionType, ProfileType} from "../../../Redux/store";
+import {AddPostCreator, UpdateNewPostTextCreator} from "../../../Redux/profile-reducer";
+
 
 
 type MyPostsType = {
     postData: ProfileType;
-    addPost: ()=>void;
+    dispatch:(action:ActionType)=>void
     newPostText: string
-    updateNewPostText:(newText:string) =>void
+
 }
+
 
 const MyPosts = (props: MyPostsType) => {
     const [posts, setPosts] = useState<ProfileType>(props.postData)
-
-    // let addPost = (title: string) => {
-    //     const newPost = {id: v1(), message: title, likesCount: 0}
-    //     setPosts([newPost, ...posts])
-    // }
-    //
-    // const [title, setTitle] = useState("")
-    //
-    // const addTitle = () => {
-    //     addPost(title)
-    //     setTitle("")
-    // }
 
     const deletePost = (id: string) => {
         const newPosts = posts.filter((p) => p.id !== id)
@@ -40,11 +30,12 @@ const MyPosts = (props: MyPostsType) => {
 
 let newPostElement= React.createRef<HTMLTextAreaElement>();
     const addPost =() =>{
-        props.addPost()
+        props.dispatch(AddPostCreator())
     }
 const changeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-       props.updateNewPostText(e.currentTarget.value)
-}
+       props.dispatch(UpdateNewPostTextCreator(e.currentTarget.value))}
+
+
     return (
         <div className={s.postBlock}>
             <h3>My post</h3>
