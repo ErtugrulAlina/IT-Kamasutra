@@ -8,22 +8,25 @@ import {News} from "./components/News/News";
 import {Music} from './components/Music/Music';
 import {Dialogs} from "./components/Dialogs/Dialogs";
 import {ActionType, stateType, StoreType} from "./Redux/store";
+import {DialogsContainer} from "./components/Dialogs/DialogsContainer";
 
 type AppPropsType = {
-    store:stateType
-   dispatch:(action:ActionType)=>void
+    state: stateType
+    dispatch: (action: ActionType) => void
+    store: StoreType
 }
 
-function App(props: AppPropsType) {
-
+function App() {
+debugger
     return (
         <BrowserRouter>
             <div className={"wrapper"}>
                 <Header/>
                 <Navbar/>
                 <div className={"wrapper-content"}>
-                    <Route path={'/dialogs'} render={() => <Dialogs state={props.store} dispatch={props.dispatch}/>}/>
-                    <Route path={'/profile'} render={() => <Profile  state={props.store.profilePage} dispatch={props.dispatch}/>}/>
+                    <Route path={'/dialogs'} render={() => <DialogsContainer />}/>
+                    <Route path={'/profile'}
+                           render={() => <Profile />}/>
                     <Route path={'/news'} render={() => <News/>}/>
                     <Route path={'/music'} render={() => <Music/>}/>
                     <Route path={'/settings'} render={() => <Music/>}/>
@@ -33,5 +36,6 @@ function App(props: AppPropsType) {
 
     );
 }
+
 export default App;
 

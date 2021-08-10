@@ -6,17 +6,17 @@ import {ActionType, ProfileType} from "../../../Redux/store";
 import {AddPostCreator, UpdateNewPostTextCreator} from "../../../Redux/profile-reducer";
 
 
-
 type MyPostsType = {
-    postData: ProfileType;
-    dispatch:(action:ActionType)=>void
-    newPostText: string
-
+    updateNewPostText: (text: string) => void;
+    addpost: () => void;
+    posts: ProfileType;
+    post: string;
 }
 
 
 const MyPosts = (props: MyPostsType) => {
-    const [posts, setPosts] = useState<ProfileType>(props.postData)
+    debugger
+    const [posts, setPosts] = useState<ProfileType>(props.posts)
 
     const deletePost = (id: string) => {
         const newPosts = posts.filter((p) => p.id !== id)
@@ -28,12 +28,15 @@ const MyPosts = (props: MyPostsType) => {
                                                        likesCount={d.likesCount}
                                                        deletePost={deletePost}/>)
 
-let newPostElement= React.createRef<HTMLTextAreaElement>();
-    const addPost =() =>{
-        props.dispatch(AddPostCreator())
+    let newPostElement = React.createRef<HTMLTextAreaElement>();
+
+
+    const addPost = () => {
+        props.addpost()
     }
-const changeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
-       props.dispatch(UpdateNewPostTextCreator(e.currentTarget.value))}
+    const changeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
+        props.updateNewPostText(e.currentTarget.value)
+    }
 
 
     return (
@@ -41,7 +44,8 @@ const changeTextArea = (e: ChangeEvent<HTMLTextAreaElement>) => {
             <h3>My post</h3>
             <div className={s.textarea}>
                 <div>
-                    <textarea value={props.newPostText} ref={newPostElement} onChange={changeTextArea}//value={title} onChange={(e) => setTitle(e.currentTarget.value)} name=""
+                    <textarea value={props.post} ref={newPostElement}
+                              onChange={changeTextArea}//value={title} onChange={(e) => setTitle(e.currentTarget.value)} name=""
                               id=""/>
                 </div>
                 <div>
