@@ -9,6 +9,7 @@ type PropTypes = {
 }
 
 const Post = (props: PropTypes) => {
+    debugger
     return (
         <div className={s.item}>
             <img src="https://raw.githubusercontent.com/Ashwinvalento/cartoon-avatar/master/lib/images/female/10.png"

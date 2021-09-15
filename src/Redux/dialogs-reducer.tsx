@@ -1,7 +1,24 @@
 import {v1} from "uuid";
-import {ActionType, DialogPageType} from "./store";
 
-let initialState = {
+export type ActionDialogsType = ReturnType<typeof UpdateNewMessagesBodyActionCreator>|ReturnType<typeof AddNewMessagesActionCreator>
+
+export type DialogPageType = { dialogs: DialogsType, messages: MessagesType, newMessageBody: string }
+
+export type DialogsType = Array<DialogsItemType>
+
+export type DialogsItemType = {
+    id: string
+    name: string
+    avatar: string
+}
+export type MessagesType = Array<MessagesItemType>
+
+type MessagesItemType = {
+    id: string
+    content: string
+}
+
+let initialState:DialogPageType= {
     dialogs: [
         {
             id: v1(),
@@ -48,24 +65,21 @@ let initialState = {
 const UPDATE_NEW_MESSAGES_BODY = "UPDATE-NEW-MESSAGES-BODY";
 const ADD_NEW_MESSAGES = "ADD-NEW-MESSAGES";
 
-export const UpdateNewMessagesBodyCreator = (text: string) =>
-    ({type:  UPDATE_NEW_MESSAGES_BODY, newBody: text} as const)
-
-export const AddNewMessagesCreator = () =>
-    ({type:  ADD_NEW_MESSAGES} as const)
-
-
-const dialogReducer = (state:DialogPageType = initialState, action: ActionType):DialogPageType=>{
+const dialogReducer = (state:DialogPageType = initialState, action: ActionDialogsType):DialogPageType=>{
     switch (action.type){
         case UPDATE_NEW_MESSAGES_BODY:
-            state.newMessageBody = action.newBody;
-            return state;
+            return {...state, newMessageBody:action.newBody};
         case ADD_NEW_MESSAGES:
             const body = state.newMessageBody
-            state.messages.push({id: v1(), content: body})
-            state.newMessageBody = ""
-            return state;
+            const newMessage = {id: v1(), content: body}
+            return {...state, messages:[...state.messages, newMessage], newMessageBody: ""};
         default:return state
     }
 }
 export default dialogReducer
+
+export const UpdateNewMessagesBodyActionCreator = (text: string) =>
+    ({type:  UPDATE_NEW_MESSAGES_BODY, newBody: text} as const)
+
+export const AddNewMessagesActionCreator = () =>
+    ({type:  ADD_NEW_MESSAGES} as const)

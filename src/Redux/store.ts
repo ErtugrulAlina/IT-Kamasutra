@@ -1,32 +1,31 @@
 import {v1} from "uuid";
-import profileReducer, {AddPostCreator, UpdateNewPostTextCreator} from "./profile-reducer";
-import dialogReducer, {AddNewMessagesCreator, UpdateNewMessagesBodyCreator} from "./dialogs-reducer";
+import profileReducer, {AddPostActionCreator, DeletePostActionCreator, UpdateNewPostTextActionCreator} from "./profile-reducer";
+import dialogReducer, {AddNewMessagesActionCreator, UpdateNewMessagesBodyActionCreator} from "./dialogs-reducer";
 
-export type DialogsType = Array<DialogsItemType>
-export type DialogsItemType = {
+ type DialogsType = Array<DialogsItemType>
+ type DialogsItemType = {
     id: string
     name: string
     avatar: string
 }
 
-export type MessagesType = Array<MessagesItemType>
+ type MessagesType = Array<MessagesItemType>
 type MessagesItemType = {
     id: string
     content: string
 }
-export type ProfileType = Array<PostType>
-export type PostType = {
+ type ProfileType = Array<PostType>
+ type PostType = {
     id: string
     message: string
     likesCount: number
 }
-
-export type stateType = {
+ type stateType = {
     profilePage: PorfilePageType
     dialogPage: DialogPageType
 }
-export type PorfilePageType = { postData: ProfileType, newPostText: string }
-export type DialogPageType = { dialogs: DialogsType, messages: MessagesType, newMessageBody: string }
+type PorfilePageType = { postData: ProfileType, newPostText: string }
+ type DialogPageType = { dialogs: DialogsType, messages: MessagesType, newMessageBody: string }
 
 export type StoreType = {
     profilePage: PorfilePageType
@@ -36,7 +35,7 @@ export type StoreType = {
     subscribe: (callback: () => void) => void
     getState: () => stateType
 }
-export type ActionType = ReturnType<typeof AddPostCreator> | ReturnType<typeof UpdateNewPostTextCreator>|ReturnType<typeof UpdateNewMessagesBodyCreator>|ReturnType<typeof AddNewMessagesCreator>
+ type ActionType = ReturnType<typeof AddPostActionCreator> | ReturnType<typeof UpdateNewPostTextActionCreator>|ReturnType<typeof UpdateNewMessagesBodyActionCreator>|ReturnType<typeof AddNewMessagesActionCreator>|ReturnType<typeof DeletePostActionCreator>
 
 // let store: StoreType = {
 //     _state: {
