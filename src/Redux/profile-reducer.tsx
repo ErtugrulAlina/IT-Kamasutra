@@ -3,10 +3,15 @@ import {v1} from "uuid";
 
 const ADD_POST = "ADD-POST";
 const UPDATE_NEW_POST_TEXT = "UPDATE-NEW-POST-TEXT";
-const DELETE_POST = "DELETE-POST"
+const DELETE_POST = "DELETE-POST";
+const SET_USERS_PROFILE = "SET-USERS-PROFILE"
 
 
-export type ActionProfileType = AddPostType | UpdateNewPostTextType | DeletePostType
+export type ActionProfileType = AddPostType
+    | UpdateNewPostTextType
+    | DeletePostType
+    | ReturnType<typeof setUsersProfile>
+
 type AddPostType = {
     type: "ADD-POST"
 }
@@ -19,9 +24,11 @@ type DeletePostType = {
     id: string
 }
 
-export type PorfilePageType = {
+export type ProfilePageType = {
     postData: ProfileType,
-    newPostText: string }
+    newPostText: string
+    propfile:null
+}
 
 export type ProfileType = Array<PostType>
 
@@ -31,15 +38,16 @@ export type PostType = {
     likesCount: number
 }
 
-let initialState: PorfilePageType= {
+let initialState: ProfilePageType= {
     postData: [
         {id: v1(), message: "Hello friends", likesCount: 12},
         {id: v1(), message: "It's my first post", likesCount: 11}
     ],
-    newPostText: ""
+    newPostText: "",
+    propfile: null,
 }
 
-const profileReducer = (state: PorfilePageType = initialState, action: ActionProfileType): PorfilePageType => {
+const profileReducer = (state: ProfilePageType = initialState, action: ActionProfileType): ProfilePageType => {
     switch (action.type) {
         case ADD_POST:
             let newPost: PostType = {
@@ -51,8 +59,9 @@ const profileReducer = (state: PorfilePageType = initialState, action: ActionPro
         case UPDATE_NEW_POST_TEXT:
             return {...state, newPostText:action.newText};
         case DELETE_POST:
-            debugger
             return {...state, postData: state.postData.filter((p) => p.id !== action.id) }
+        case SET_USERS_PROFILE:
+            return { ... state, propfile: action.profile}
         default:
             return state
     }
@@ -66,3 +75,8 @@ export const UpdateNewPostTextActionCreator = (text: string) =>
     ({type: UPDATE_NEW_POST_TEXT, newText: text} as const)
 
 export const DeletePostActionCreator = (id: string):DeletePostType => ({type: DELETE_POST, id:id} as const)
+
+export const setUsersProfile = (profile:any)=>({
+    type: SET_USERS_PROFILE,
+    profile,
+} as const)
